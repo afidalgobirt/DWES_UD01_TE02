@@ -27,16 +27,11 @@
         if (isset($_GET["hireDate"])) {
             $hireDate = $_GET["hireDate"];
 
-            try {
-                if ($hireDate == "") {
-                    $error = true;
-                    $hireDateErrorMsg = "<span style='color:#FF0000'>* The field 'Hire Date' mustbe filled out.</span>";
-                } else {
-                    $handOutDate = date_format(date_add(new DateTime($hireDate), new DateInterval("P10D")), "Y-m-d");
-                }
-            } catch (Exception $e) { // Assume any error is caused because of an incorrect date format.
+            if ($hireDate == "") {
                 $error = true;
-                $hireDateErrorMsg = "<span style='color:#FF0000'>* The format must be 'YYYY-mm-dd'.</span>";
+                $hireDateErrorMsg = "<span style='color:#FF0000'>* The field 'Hire Date' mustbe filled out.</span>";
+            } else {
+                $handOutDate = date_format(date_add(new DateTime($hireDate), new DateInterval("P10D")), "d/m/Y");
             }
         }
 
@@ -118,7 +113,7 @@
                 echo "$emailErrorMsg<br>"; // If validation is passed error message will be "".
             ?>
             <label for="hireDate">Hire date</label>
-            <input name="hireDate" type="text" placeholder="YYYY-mm-dd">
+            <input name="hireDate" type="date">
             <?php
                 echo "$hireDateErrorMsg<br>"; // If validation is passed error message will be "".
             ?>
@@ -144,7 +139,8 @@
                 echo "Surname: $_GET[surname]<br>";
                 echo "Book: $_GET[book]<br>";
                 echo "Email: $_GET[email]<br>";
-                echo "Hire Date: $_GET[hireDate] (hand out date: $handOutDate)<br>";
+                $hireDate = date_format(new DateTime($_GET["hireDate"]), "d/m/Y");
+                echo "Hire Date: $hireDate (hand out date: $handOutDate)<br>";
                 echo "ID: $_GET[id]<br>";
                 echo "Phone Number: $_GET[phoneNumber]<br>";
             }
